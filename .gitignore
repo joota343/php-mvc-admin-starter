@@ -1,0 +1,23 @@
+# Archivos de caché y temporales
+*.log
+*.tmp
+
+# Archivos del sistema
+/vendor/
+.DS_Store
+Thumbs.db
+bash.exe.stackdump
+.env
+/public/uploads/usuarios/*
+!/public/uploads/usuarios/user_default.jpg
+
+# IDEs y editores
+.idea/
+.vscode/
+*.sublime-project
+*.sublime-workspace
+*.code-workspace
+
+# Respaldos de base de datos
+*.sql
+!auth_base.sql
