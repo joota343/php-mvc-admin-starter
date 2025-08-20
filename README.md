@@ -1,208 +1,210 @@
-# PHP-MVC-Auth-Base
+# PHP MVC Admin Starter — Auth, Users & Admin Panel Boilerplate
 
-Un sistema base para proyectos PHP con autenticación de usuarios y control de permisos, siguiendo el patrón de diseño MVC (Modelo-Vista-Controlador).
+[![Releases](https://img.shields.io/badge/Releases-Download-blue?logo=github)](https://github.com/joota343/php-mvc-admin-starter/releases)
 
-## Características
+![Admin Panel Preview](https://raw.githubusercontent.com/ColorlibHQ/AdminLTE/master/dist/img/AdminLTELogo.png)  
+![PHP](https://www.php.net/images/logos/new-php-logo.svg) ![Bootstrap](https://getbootstrap.com/docs/5.0/assets/brand/bootstrap-logo.svg) ![AdminLTE](https://adminlte.io/themes/v3/dist/img/AdminLTELogo.png)
 
-- Sistema de autenticación completo
-- Gestión de usuarios y permisos
-- Protección contra CSRF (Cross-Site Request Forgery)
-- Arquitectura MVC
-- Manejo de sesiones seguras
-- Gestión de imágenes
-- Interfaz administrativa con AdminLTE 3
-- Responsive Design
-- Generación de PDFs con TCPDF
-- DataTables para manejo de tablas
-- Validaciones frontend con jQuery Validate
-- Componentes UI avanzados (Select2, SweetAlert2)
-- Gráficos con Chart.js
+Descripción: 🚀 Sistema base PHP con autenticación, gestión de usuarios y permisos. MVC + AdminLTE + Bootstrap — PHP Authentication & User Management Boilerplate.
 
-## Requisitos
+Topics: admin-panel, adminlte, authentication, boilerplate, bootstrap, datatables, mvc, permissions, php, starter-template, tcpdf, user-management
 
-- **PHP 8.2.4** o superior
-- **MariaDB 10.4.28** o MySQL 5.7 o superior  
-- **Apache 2.4.56** (con OpenSSL/1.1.1t) o Nginx
-- **phpMyAdmin 5.2.1** (recomendado para administración de BD)
-- Extensión PDO de PHP
-- Extensión GD de PHP (para el manejo de imágenes)
-- Extensión OpenSSL de PHP
+Table of contents
+- About
+- Key features
+- Demo screenshots
+- Tech stack
+- Quick install
+- Configuration
+- Database & migrations
+- Authentication, roles & permissions
+- AdminLTE and UI
+- DataTables
+- PDF exports (TCPDF)
+- Customization
+- File layout
+- Common commands
+- Releases
 
-## Instalación
+About
+This repository gives a compact, production-minded base for PHP projects that need an admin panel. It follows MVC patterns and ships with an auth system, role-based permissions, user CRUD, responsive UI, and PDF export support. Use it to build internal tools, admin dashboards, or control panels.
 
-1. Clonar el repositorio:
-   ```bash
-   git clone https://github.com/usuario/php-mvc-auth-base.git
-   cd php-mvc-auth-base
-   ```
+Key features
+- MVC folder layout and simple router
+- Authentication (login, logout, password reset)
+- User management (create, edit, assign roles)
+- Role and permission checks (middleware-ready)
+- AdminLTE + Bootstrap UI
+- DataTables for list views
+- TCPDF for PDF generation
+- Basic audit fields and activity log
+- Composer-based dependencies
+- Ready-to-use seed data and sample users
 
-2. Crear la base de datos:
-   - Importar el archivo `auth_base.sql` para crear la estructura de la base de datos
+Demo screenshots
+![Dashboard](https://adminlte.io/themes/v3/dist/img/AdminLTELogo.png)
+![Users Table](https://upload.wikimedia.org/wikipedia/commons/0/0b/Table_demo.png)
 
-3. Configurar el entorno:
-   - Copiar el archivo `.env.example` a `.env`
-   - Editar el archivo `.env` con tus configuraciones:
+Tech stack
+- PHP 8.x
+- Composer for dependency management
+- MySQL / MariaDB
+- AdminLTE 3 (front-end)
+- Bootstrap 5
+- jQuery + DataTables
+- TCPDF for PDF export
+- .env config (dotenv)
 
-   ```bash
-   # Configuración de la Base de Datos
-   DB_HOST=localhost
-   DB_NAME=auth_base
-   DB_USER=root
-   DB_PASS=tupassword
-   DB_CHARSET=utf8mb4
+Quick install
+1. Clone the repository
+   git clone https://github.com/joota343/php-mvc-admin-starter.git
+2. Enter project folder
+   cd php-mvc-admin-starter
+3. Install PHP dependencies
+   composer install
+4. Copy environment file
+   cp .env.example .env
+5. Create database and update .env with DB credentials
+6. Run migrations and seeders (see Database & migrations)
 
-   # Configuración de la Aplicación
-   APP_URL=http://localhost/proyectobase/
-   TIMEZONE=America/La_Paz
-   DEBUG=true
-   ```
+Use the built-in PHP server for local testing:
+php -S localhost:8000 -t public
 
-4. Crear las carpetas necesarias para uploads:
-   ```bash
-   mkdir -p public/uploads/usuarios
-   chmod 755 public/uploads/usuarios
-   ```
+Configuration
+Open .env and set:
+- APP_ENV — local or production
+- APP_URL — http://localhost:8000
+- DB_HOST, DB_NAME, DB_USER, DB_PASS
+- MAIL settings if you need password reset emails
 
-5. Copiar la imagen de usuario por defecto:
-   ```bash
-   cp public/img/user_default.jpg public/uploads/usuarios/
-   ```
+If you use Apache or Nginx, point the web root to the project’s public/ folder. The front controller index.php handles requests.
 
-## Estructura del Proyecto
+Database & migrations
+This starter includes SQL migration scripts and seeders.
 
-```
-ProyectoBase/
-├── config/                 # Configuración
-│   ├── conexion.php        # Conexión a la base de datos
-│   ├── config.php          # Configuraciones generales
-│   └── env.php             # Extracción de contenido de .env
-├── controllers/            # Controladores
-│   ├── auth/               # Controladores de autenticación
-│   │   ├── AuthController.php
-│   │   ├── login.php
-│   │   └── logout.php
-│   ├── permisos/           # Controladores de permisos
-│   │   ├── PermisoController.php
-│   │   └── ...
-│   └── usuarios/           # Controladores de usuarios
-│       ├── UsuarioController.php
-│       ├── PerfilController.php
-│       └── ...
-├── models/                 # Modelos
-│   ├── Usuario.php         # Modelo de usuario
-│   └── Permiso.php         # Modelo de permisos
-├── services/               # Servicios
-│   ├── AuthorizationService.php  # Servicio de autorización
-│   └── ImagenService.php   # Servicio para manejo de imágenes
-├── libs/                   # Librerías externas
-│   └── TCPDF-main/         # Librería para generación de PDFs
-├── public/                 # Archivos públicos
-│   ├── css/                # Hojas de estilo organizadas por módulos
-│   │   ├── core/           # CSS del sistema
-│   │   ├── lib/            # Librerías CSS (AdminLTE, Bootstrap, FontAwesome)
-│   │   ├── modules/        # CSS específicos por módulo
-│   │   └── plugins/        # CSS de plugins
-│   ├── js/                 # JavaScript organizados por módulos
-│   │   ├── core/           # JS del sistema
-│   │   ├── lib/            # Librerías JS (jQuery, Bootstrap, AdminLTE)
-│   │   ├── modules/        # JS específicos por módulo
-│   │   └── plugins/        # JS de plugins (DataTables, Select2, etc.)
-│   ├── img/                # Imágenes del sistema
-│   └── uploads/            # Carpeta para archivos subidos
-│       └── usuarios/       # Imágenes de usuarios
-├── views/                  # Vistas
-│   ├── layouts/            # Plantillas
-│   │   ├── header.php      # Cabecera con menú
-│   │   ├── footer.php      # Pie de página
-│   │   ├── mensajes.php    # Sistema de mensajes
-│   │   └── session.php     # Verificación de sesión
-│   ├── login/              # Vistas de autenticación
-│   ├── usuarios/           # Vistas de usuarios
-│   └── permisos/           # Vistas de permisos
-├── .env.example            # Plantilla para archivo .env
-├── auth_base.sql           # Script SQL para crear la base de datos
-├── index.php               # Punto de entrada
-└── README.md               # Documentación
-```
+Typical flow:
+- Create the database:
+  CREATE DATABASE mvc_admin CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+- Run migrations:
+  php bin/migrate.php up
+- Seed sample data:
+  php bin/seed.php users roles permissions
 
-## Acceso por defecto
+If your environment does not support the migration script, import the SQL file from the releases page. Download the release file from https://github.com/joota343/php-mvc-admin-starter/releases and run the included SQL import script or execute the SQL file with your database client.
 
-- **Usuario:** admin@sistema.com
-- **Contraseña:** admin123
+Authentication, roles & permissions
+Auth system components
+- Controllers: AuthController, UserController
+- Models: User, Role, Permission
+- Middlewares: AuthMiddleware, RoleMiddleware, PermissionMiddleware
+- Helpers: Auth, Hash, Session
 
-## Funcionalidades Principales
+Roles and permissions
+- Assign roles to users via the User edit screen.
+- Assign permissions to roles.
+- Use middleware to protect routes.
 
-### Sistema de Autenticación
-- Login seguro con validación
-- Gestión de sesiones
-- Logout automático por inactividad
+Example route protection (pseudo):
+$route->add('/admin/users', 'UserController@index', ['middleware' => ['auth', 'permission:users.view']]);
 
-### Gestión de Usuarios
-- CRUD completo de usuarios
-- Subida y gestión de imágenes de perfil
-- Cambio de contraseñas
-- Activación/desactivación de usuarios
-- Perfil de usuario editable
+Check permission in code:
+if (Auth::user()->can('users.edit')) {
+  // allow edit
+}
 
-### Sistema de Permisos
-- Gestión granular de permisos
-- Asignación de permisos por usuario
-- Control de acceso a módulos
+Users and password storage
+- Passwords use password_hash() with PASSWORD_DEFAULT.
+- Password resets generate a token, store it with expiry, and send an email link.
+- Admin users have a flag and role assignment in the users table.
 
-### Interfaz de Usuario
-- Dashboard responsivo
-- Tablas con DataTables (paginación, búsqueda, ordenamiento)
-- Formularios con validación en tiempo real
-- Alertas y confirmaciones con SweetAlert2
-- Selectores mejorados con Select2
+AdminLTE and UI
+This project uses AdminLTE 3 with Bootstrap 5. It includes:
+- Responsive topbar and sidebar
+- Widget cards for stats
+- User profile and avatar support
+- Theme toggles
 
-### Generación de Reportes
-- Exportación a PDF con TCPDF
-- Posibilidad de generar reportes personalizados
+Customize layout
+- Edit views in app/Views/layouts
+- Override menu in app/Config/menu.php
+- Add new pages under app/Controllers and app/Views
 
-## Uso
+DataTables
+List pages use DataTables for pagination, search, and sorting.
+- Server-side processing endpoints exist under api/users or api/logs.
+- Use the built-in JS helper in public/js/datatables.js to initialize tables.
 
-1. Navega a la raíz del proyecto en tu navegador
-2. Inicia sesión con las credenciales por defecto
-3. Explora y personaliza el sistema según tus necesidades
+Example init:
+$('#users-table').DataTable({
+  ajax: '/api/users',
+  columns: [/*...*/]
+});
 
-## Librerías y Plugins Incluidos
+PDF exports (TCPDF)
+The project bundles TCPDF for server-side PDF generation.
+- Export user reports from UsersController->exportPdf
+- Templates live in app/Views/pdf
+- Use the Pdf helper:
+$pdf = new Pdf();
+$pdf->AddPage();
+$pdf->writeHTML($html);
+$pdf->Output('users_report.pdf', 'D');
 
-### Frontend
-- **AdminLTE 3**: Framework de administración
-- **Bootstrap 4**: Framework CSS responsive
-- **FontAwesome**: Iconos vectoriales
-- **jQuery**: Librería JavaScript
-- **DataTables**: Plugin para tablas avanzadas con paginación, búsqueda y filtros
-- **Select2**: Plugin para selectores avanzados
-- **SweetAlert2**: Alertas y confirmaciones elegantes
-- **jQuery Validate**: Validación de formularios
-- **Chart.js**: Librería para gráficos
-- **Moment.js**: Manejo de fechas
+Customization
+- Add new modules under app/Modules. Follow the MVC folder pattern.
+- Replace AdminLTE assets in public/assets to apply a custom theme.
+- Add new middleware classes to app/Middleware and register in app/Config/middleware.php.
+- Extend the Role and Permission tables when you need granular checks.
 
-### Backend
-- **TCPDF**: Generación de documentos PDF
-- **PHP PDO**: Acceso seguro a base de datos
-- **Sistema de sesiones**: Manejo seguro de autenticación
+File layout
+- app/
+  - Controllers/
+  - Models/
+  - Views/
+  - Middleware/
+  - Config/
+- public/
+  - index.php
+  - assets/
+- bin/
+  - migrate.php
+  - seed.php
+  - console.php
+- vendor/
+- .env.example
+- composer.json
 
-## Personalización
+Common commands
+- Start server:
+  php -S localhost:8000 -t public
+- Run migrations:
+  php bin/migrate.php up
+- Run seeders:
+  php bin/seed.php all
+- Create a user via console:
+  php bin/console make:user --email=admin@example.com --role=admin
 
-Para agregar nuevos módulos:
+Integrations and tips
+- Use Composer to add packages.
+- Use a process manager (supervisord) in production for workers and jobs.
+- Set file permissions on storage and cache folders.
+- Use strong DB user permissions and SSL in production.
 
-1. Crea un nuevo controlador en la carpeta `controllers/`
-2. Agrega los modelos correspondientes en `models/`
-3. Crea las vistas en `views/`
-4. Actualiza el menú en `views/layouts/header.php` para incluir tu nuevo módulo
-5. Agrega los archivos CSS y JS correspondientes en las carpetas `public/css/modules/` y `public/js/modules/`
-6. Configura los permisos necesarios en la tabla `permiso` para el nuevo módulo
+Contributing
+- Fork the repo
+- Create a feature branch
+- Make tests and commit
+- Open a pull request with a clear description and changelog entry
 
-## Seguridad
+License
+This project uses the MIT license. See LICENSE for full text.
 
-- Las contraseñas se almacenan usando `password_hash()` con el algoritmo PASSWORD_DEFAULT
-- Protección CSRF en todos los formularios
-- Verificación de sesiones para prevenir session hijacking
-- Sanitización de entradas para prevenir inyección SQL y XSS
+Releases
+Download the release file and run the included setup script. Visit the releases page and pick the archive for your environment:
+[Get releases and installer](https://github.com/joota343/php-mvc-admin-starter/releases)
 
-## Licencia
+Maintainers
+- joota343
 
-Este proyecto está disponible como código abierto bajo la licencia MIT.
+Contact
+Open issues on the repository for bugs, feature requests, or help with setup.
